@@ -1216,7 +1216,7 @@ const tests = {
   'do not include store in snapshots'() {
     function NoBootstrap() { }
 
-    alt.createStore(NoBootstrap, 'NoBootstrap', false)
+    alt.createUnsavedStore(NoBootstrap, 'NoBootstrap')
 
     const snapshot = JSON.parse(alt.takeSnapshot())
 
