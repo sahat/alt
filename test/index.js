@@ -321,9 +321,9 @@ const interceptSnapshotStore = alt.createStore(InterceptSnapshotStore)
 class AltInstance extends Alt {
   constructor() {
     super()
-    this.addActions('myActions', MyActions)
+    this.addActions('myActions', MyActions, this)
     this.addActions('fauxActions', ['one', 'two'])
-    this.addStore('myStore', MyStore)
+    this.addStore('myStore', MyStore, this)
   }
 }
 
@@ -1218,9 +1218,18 @@ const tests = {
 
     alt.createUnsavedStore(NoBootstrap, 'NoBootstrap')
 
-    const snapshot = JSON.parse(alt.takeSnapshot())
+    let snapshot = JSON.parse(alt.takeSnapshot())
 
     assert.isUndefined(snapshot.NoBootstrap, 'Store does not exist in snapshots')
+    assert.isObject(snapshot.AltSecondStore, 'AltSecondStore exists')
+
+    alt.createUnsavedStore({
+      displayName: 'NoBootstrapObject'
+    })
+
+    snapshot = JSON.parse(alt.takeSnapshot())
+
+    assert.isUndefined(snapshot.NoBootstrapObject, 'Store does not exist in snapshots')
     assert.isObject(snapshot.AltSecondStore, 'AltSecondStore exists')
   },
 
